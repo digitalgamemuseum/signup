@@ -22,9 +22,9 @@ $(document).ready(function() {
       //get input field values data to be sent to server
       post_data = {
         'user_email' : $('input[name=email]').val(), 
-        'user_comments' : $('input[name=comments]').val(), 
+        'user_comments' : $('textarea[name=comments]').val(), 
       };
-
+      
       //Ajax post data to server
       $.post('submit.php', post_data, function(response) {
         // we don't care about the response - it's possible we should

@@ -11,9 +11,6 @@ if($_POST)
         die($output); //exit script outputting json data
     } 
     
-    $ecks = json_encode(array('type'=>'done'));
-    die($ecks);
-    
     $user_email = $_POST["user_email"];
     $user_comments = $_POST["user_comments"];
     
@@ -22,10 +19,10 @@ if($_POST)
     $dbConnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $dbConnection->prepare('INSERT INTO data (email, comments) VALUES (:email, :comments)');
+    $stmt = $dbConnection->prepare('INSERT INTO data (email, comments, timestamp) VALUES (:email, :comments, NOW())');
 
     $stmt->execute(array('email' => $user_email, 'comments' => $user_comments));
     
-    die($json_encode(array('type'=>'done')));
+    die(json_encode(array('type'=>'done')));
 }
 ?>
