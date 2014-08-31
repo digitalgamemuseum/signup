@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<script src="jquery-2.1.1.js"></script>
+
+<!-- include Google hosted jQuery Library -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Start jQuery code -->
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#overlay").css("height", $(document).height());
+
+  $("#submit_btn").click(function() { 
+
+    var proceed = true;
+
+    if(proceed) //everything looks good! proceed...
+    {
+      //get input field values data to be sent to server
+      post_data = {
+        'user_email' : $('input[name=email]').val(), 
+        'user_comments' : $('input[name=comments]').val(), 
+      };
+
+      //Ajax post data to server
+      $.post('submit.php', post_data, function(response) {
+        // we don't care about the response - it's possible we should
+        // clear out fields
+        $("input[id!=submit_btn], textarea").val(''); 
+        
+        $("#overlay").slideDown().delay(3000).slideUp();
+      }, 'json');
+    }
+  });
+  
+  $(window).bind("resize", function(){
+     $("#overlay").css("height", $(window).height());
+  });
+  
+  // config module
+  // disable everything really form-y until we can get the config set
+  $("#submit_btn, #contact_body label").hide();
+  
+  $("#config_btdton").click(function () {
+    $(".btdtsteam").show();
+  });
+  $("#config_btdtoff").click(function () {
+    $(".btdtsteam").hide();
+  });
+  $("#config_close").click(function () {
+    $("#config").hide();
+    $("#submit_btn, #contact_body label").show();
+  });
+});
+
+</script>
+
+</head>
+<body class="jquery">
+
+<div id="root">
+    <div id="config">
+      <div><span>BTDT text:</span><input type="submit" id="config_btdton" value="ON"><input type="submit" id="config_btdtoff" value="OFF"></div>
+      <div><input type="submit" id="config_close" value="Close config"></div>
+    </div>
+    
+    <div id="overlay">
+      <img src="thanks.png" id="overlaycontents" />
+    </div>
+    <div id="contact_body">
+        <center>
+          <img src="3by2.png" />
+          <h1>Sign up to receive our monthly newsletter!</h1>
+          <div class="btdtsteam">When you sign up for the mailing list, we’ll send you a Steam key to <em>The <em class="color">Time Gentlemen, Please!</em> and <em class="color">Ben There, Dan That!</em> Special Edition Double Pack</em>, a pair of ridiculous British comedy adventure games by indie developer Size Five Games.<br /><small>These games may not be appropriate for children.</small></div>
+          <label>
+              <div>Email address</div>
+              <input type="email" name="email" />
+          </label>
+          <label>
+              <div>Comments</div>
+              <textarea name="comments"></textarea>
+          </label>
+          <input type="submit" id="submit_btn" value="Submit" />
+        </center>
+    </div>
+</div>
+
+</body>
+</html>
