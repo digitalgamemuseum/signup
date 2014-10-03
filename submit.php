@@ -13,15 +13,16 @@ if($_POST)
     
     $user_email = $_POST["user_email"];
     $user_comments = $_POST["user_comments"];
+    $btdt = ($_POST["btdt"] === "true");
     
     $dbConnection = new PDO('mysql:dbname=dgm;host=localhost;charset=utf8', 'dgm', 'dgm');
 
     $dbConnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $dbConnection->prepare('INSERT INTO data (email, comments, timestamp) VALUES (:email, :comments, NOW())');
+    $stmt = $dbConnection->prepare('INSERT INTO data (email, comments, btdt, timestamp) VALUES (:email, :comments, :btdt, NOW())');
 
-    $stmt->execute(array('email' => $user_email, 'comments' => $user_comments));
+    $stmt->execute(array('email' => $user_email, 'comments' => $user_comments, 'btdt' => $btdt));
     
     die(json_encode(array('type'=>'done')));
 }

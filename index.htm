@@ -11,6 +11,8 @@
 <!-- Start jQuery code -->
 <script type="text/javascript">
 $(document).ready(function() {
+  var btdtcode = true;
+  
   $("#overlay").css("height", $(document).height());
 
   $("#submit_btn").click(function() { 
@@ -23,6 +25,7 @@ $(document).ready(function() {
       post_data = {
         'user_email' : $('input[name=email]').val(), 
         'user_comments' : $('textarea[name=comments]').val(), 
+        'btdt' : btdtcode,
       };
       
       //Ajax post data to server
@@ -46,9 +49,11 @@ $(document).ready(function() {
   
   $("#config_btdton").click(function () {
     $(".btdtsteam").show();
+    btdtcode = true;
   });
   $("#config_btdtoff").click(function () {
     $(".btdtsteam").hide();
+    btdtcode = false;
   });
   $("#config_close").click(function () {
     $("#config").hide();
