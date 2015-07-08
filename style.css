@@ -18,7 +18,7 @@ label div {
     float: left;
 	text-align: center;
 }
-div, h1 {
+.element {
 	padding-top: 2em;
 }
 em.color {
@@ -27,7 +27,10 @@ em.color {
 
 /* INPUT */
 
-input, 
+input[type=email], 
+input[type=text], 
+input[type=submit], 
+input[type=button], 
 textarea, 
 select {
     box-sizing: border-box;
@@ -50,17 +53,28 @@ select:focus {
     border: 1px solid #cb412f;
 }
 
-input {
+input[type=email], input[type=text] {
     width: 30em;
 	text-align: center;
 }
+
+input[type=radio] {
+	margin: 0.5em;
+	width: 1.2em;
+	height: 1.2em;
+}
+
 textarea {
     height: 10em;
     width: 40em;
 }
 
+label {
+	display: inline;
+}
+
 input[type=submit],
-input[type=button]{
+input[type=button] {
     border: none;
     padding: 8px 15px 8px 15px;
     background: #FF8500;
@@ -74,9 +88,18 @@ input[type=button]{
 	width: 12em;
 }
 input[type=submit]:hover,
-input[type=button]:hover{
+input[type=button]:hover {
     background: #EA7B00;
     color: #fff;
+}
+
+.selectable:hover {
+	cursor: pointer;
+}
+	
+
+.volname {
+	padding-top: 0.5em;
 }
 
 /* OVERLAY */

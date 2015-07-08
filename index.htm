@@ -12,27 +12,55 @@
 <script type="text/javascript">
 $(document).ready(function() {
   var btdtcode = true;
+  var volunteer = false;
+  
+  $(".volunteer").hide();
+  $(".volname").css("visibility", "hidden");
+  
+  function resetRed() {
+    $(".volunteer span").css("border", "none");
+    $(".volname label").css("border", "none");
+  }
   
   $("#overlay").css("height", $(document).height());
 
   $("#submit_btn").click(function() { 
+    resetRed();
 
     var proceed = true;
 
+    if (volunteer) {
+      if (!$('input[name=volunteer]:checked').val()) {
+        proceed = false;
+        $(".volunteer span").css("border", "3px solid red");
+        console.log("testa");
+      }
+    
+      if ($('input[name=volunteer]:checked').val() == "volunteer" && $('input[name=name]').val() == "") {
+        proceed = false;
+        $(".volname label").css("border", "8px solid red");
+      }
+    }
+    
     if(proceed) //everything looks good! proceed...
     {
+    
       //get input field values data to be sent to server
       post_data = {
         'user_email' : $('input[name=email]').val(), 
-        'user_comments' : $('textarea[name=comments]').val(), 
+        'user_comments' : $('textarea[name=comments]').val(),
+        'volunteer': $('input[name=volunteer]:checked').val() || "unknown",
+        'volunteer_name': $('input[name=name]').val(),
         'btdt' : btdtcode,
       };
       
       //Ajax post data to server
       $.post('submit.php', post_data, function(response) {
         // we don't care about the response - it's possible we should
+        
         // clear out fields
-        $("input[id!=submit_btn], textarea").val(''); 
+        $("input[id!=submit_btn][type!=radio], textarea").val('');
+        $("input[type=radio]").prop('checked', false);
         
         $("#overlay").slideDown().delay(3000).slideUp();
       }, 'json');
@@ -43,9 +71,19 @@ $(document).ready(function() {
      $("#overlay").css("height", $(window).height());
   });
   
+  // volunteer button
+  $("#volunteer_false").click(function () {
+    $(".volunteer span").css("border", "none");
+    $(".volname").css("visibility", "hidden");
+  });
+  $("#volunteer_true").click(function () {
+    $(".volunteer span").css("border", "none");
+    $(".volname").css("visibility", "visible");
+  });
+  
   // config module
-  // disable everything really form-y until we can get the config set
-  $("#submit_btn, #contact_body label").hide();
+  // disable submit button until the config is ready
+  $("#submit_btn").hide();
   
   $("#config_btdton").click(function () {
     $(".btdtsteam").show();
@@ -55,9 +93,19 @@ $(document).ready(function() {
     $(".btdtsteam").hide();
     btdtcode = false;
   });
+  $("#config_volunteeron").click(function () {
+    $(".volunteer").show();
+    volunteer = true;
+  });
+  $("#config_volunteeroff").click(function () {
+    $(".volunteer").hide();
+    volunteer = false;
+  });
+  
   $("#config_close").click(function () {
     $("#config").hide();
-    $("#submit_btn, #contact_body label").show();
+    $("#submit_btn").show();
+    $(".volname").css("visibility", "hidden");
   });
 });
 
@@ -69,6 +117,7 @@ $(document).ready(function() {
 <div id="root">
     <div id="config">
       <div><span>BTDT text:</span><input type="submit" id="config_btdton" value="ON"><input type="submit" id="config_btdtoff" value="OFF"></div>
+      <div><span>Volunteer options:</span><input type="submit" id="config_volunteeron" value="ON"><input type="submit" id="config_volunteeroff" value="OFF"></div>
       <div><input type="submit" id="config_close" value="Close config"></div>
     </div>
     
@@ -79,15 +128,34 @@ $(document).ready(function() {
         <center>
           <h1>Sign up to receive our monthly newsletter!</h1>
           <div class="btdtsteam">When you sign up for the mailing list, we'll send you a Steam key to "The <em class="color">Time Gentlemen, Please!</em> and <em class="color">Ben There, Dan That!</em> Special Edition Double Pack," a pair of ridiculous British comedy adventure games by indie developer Size Five Games.<br /><small><em>(These games may not be appropriate for children.)</em></small></div>
-          <label>
-              <div>Email address</div>
-              <input type="email" name="email" />
-          </label>
-          <label>
-              <div>Comments</div>
-              <textarea name="comments"></textarea>
-          </label>
-          <input type="submit" id="submit_btn" value="Submit" />
+          
+          <div class="element">
+            <label>
+                <div>Email address</div>
+                <input type="email" name="email" />
+            </label>
+          </div>
+          <div class="element volunteer">
+            <span>
+              <label class="selectable"><input type="radio" name="volunteer" value="visitor" id="volunteer_false"/>Visitor</label>
+              <label class="selectable"><input type="radio" name="volunteer" value="volunteer" id="volunteer_true"/>Volunteer</label>
+            </span>
+          </div>
+          <div class="element volname">
+            <label>
+                <div>Name</div>
+                <input type="text" name="name" />
+            </label>
+          </div>
+          <div class="element">
+            <label>
+                <div>Comments</div>
+                <textarea name="comments"></textarea>
+            </label>
+          </div>
+          <div class="element">
+            <input type="submit" id="submit_btn" value="Submit" />
+          </div>
         </center>
     </div>
 </div>
